@@ -20,7 +20,7 @@ lab02
 ESP32 实验扩展
 新增了针对 ESP32 开发板的实验文件。
 文件名: lab02.ino
-功能描述:用 “millis()”函数控制LED呼吸闪烁
+功能描述:用 “millis()”函数控制LED1Hz闪烁
 
 lab03
 ESP32 实验扩展

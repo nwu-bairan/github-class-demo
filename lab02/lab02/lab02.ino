@@ -1,57 +1,53 @@
-// 定义LED引脚
-const int ledPin = 2;  
-#define LED_green 26
-#define LED_red 27
-#define LED_yellow 25
+// 定义引脚
+const int PIN_RED = 27;
+const int PIN_YELLOW = 25;
+const int PIN_GREEN = 26;
+const int PIN_ONBOARD = 2; // 板载LED通常是13
 
+// 定义闪烁间隔 (1Hz = 1000ms)
+const unsigned long INTERVAL = 500; 
 
-// 设置PWM属性
-const int freq = 5000;          // 频率 5000Hz
-const int resolution = 8;       // 分辨率 8位 (0-255)
+// 记录上次闪烁的时间
+unsigned long previousMillis = 0; 
 
-unsigned long previousMillis = 0; // 记录上一次执行的时间
-const long interval = 10;         // 对应原来的 delay(10)
-
-int dutyCycle = 0;    // 当前亮度
-int direction = 1;    // 方向：1 表示变亮，-1 表示变暗
+// 记录LED当前的状态 (LOW 或 HIGH)
+int ledState = LOW; 
 
 void setup() {
-  Serial.begin(115200);
-
-  // 【新版用法】直接将引脚、频率和分辨率绑定
-  // 它会自动返回一个关联的通道（如果需要的话）
-  ledcAttach(ledPin, freq, resolution);
-  ledcAttach(LED_green, freq, resolution);
-  ledcAttach(LED_red, freq, resolution);
-  ledcAttach(LED_yellow, freq, resolution);
+  // 初始化引脚模式
+  pinMode(PIN_RED, OUTPUT);
+  pinMode(PIN_YELLOW, OUTPUT);
+  pinMode(PIN_GREEN, OUTPUT);
+  pinMode(PIN_ONBOARD, OUTPUT);
+  
+  // 初始状态全部熄灭
+  digitalWrite(PIN_RED, LOW);
+  digitalWrite(PIN_YELLOW, LOW);
+  digitalWrite(PIN_GREEN, LOW);
+  digitalWrite(PIN_ONBOARD, LOW);
 }
 
 void loop() {
   // 获取当前时间
   unsigned long currentMillis = millis();
 
-  // 检查时间是否到了 (相当于检查 delay 是否结束)
-  if (currentMillis - previousMillis >= interval) {
-    
+  // 检查是否过了 1 秒
+  if (currentMillis - previousMillis >= INTERVAL) {
+    // 保存当前时间
     previousMillis = currentMillis;
 
-    // 每次进来只走一步
-    dutyCycle += direction;
-
-    // 判断是否到头了，用来掉头
-    if (dutyCycle >= 255) {
-      direction = -1; // 变亮到头了，开始变暗
-    } else if (dutyCycle <= 0) {
-      direction = 1;  // 变暗到头了，开始变亮
+    // 翻转状态变量
+    if (ledState == LOW) {
+      ledState = HIGH;
+    } else {
+      ledState = LOW;
     }
 
-    // 写入 LED 
-    ledcWrite(ledPin, dutyCycle); 
-    ledcWrite(LED_green, 256 - dutyCycle); 
-    ledcWrite(LED_red, 256 - dutyCycle); 
-    ledcWrite(LED_yellow, 256 - dutyCycle); 
+    // 同时更新所有四个 LED 的状态
+    digitalWrite(PIN_RED, ledState);
+    digitalWrite(PIN_YELLOW, ledState);
+    digitalWrite(PIN_GREEN, ledState);
+    digitalWrite(PIN_ONBOARD, ledState);
   }
 
-  
-  
 }
