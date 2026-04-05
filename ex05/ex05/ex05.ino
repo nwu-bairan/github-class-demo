@@ -5,8 +5,8 @@
 #define LED_PIN 2
 
 // 速度档位参数
-const unsigned long SPEED_TIME_1 = 10;  
-const unsigned long SPEED_TIME_2 = 15;  
+const unsigned long SPEED_TIME_1 = 5;  
+const unsigned long SPEED_TIME_2 = 10;  
 const unsigned long SPEED_TIME_3 = 20;  
 
 // 呼吸灯参数

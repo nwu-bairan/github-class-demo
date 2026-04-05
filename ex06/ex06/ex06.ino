@@ -20,7 +20,7 @@ void setup() {
   ledcAttach(LED_A_PIN, 5000, 8);
   ledcAttach(LED_B_PIN, 5000, 8);
   
-  Serial.println("启动：严格 0-255 互补逻辑...");
+  Serial.println(".");
 }
 
 void loop() {
